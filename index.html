@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jule-Sweaters · B2B Jule-Konfigurator</title>
+  <meta name="description" content="Design jeres egne julesweatre til virksomheden eller sportsklubben. Få et prisestimat på sekunder og 3 gratis designudkast.">
+  <link rel="stylesheet" href="assets/julekonfigurator.css">
+  <style>
+    /* Kun til demo-siden — ikke en del af selve modulet */
+    body { margin: 0; background: #F6EFE6; padding: 40px 0; }
+    .demo-intro { max-width: 820px; margin: 0 auto 8px; padding: 0 16px; text-align: center;
+                  font-family: 'Poppins', sans-serif; color: #2B2B2B; }
+    .demo-intro h1 { color: #BC3A35; font-size: 1.4rem; margin: 0 0 4px; }
+    .demo-intro p  { color: #6B6B6B; margin: 0; font-size: .95rem; }
+  </style>
+</head>
+<body>
+
+  <div class="demo-intro">
+    <h1>🎄 Design jeres egen julesweater</h1>
+    <p>Til virksomheder &amp; sportsklubber — vævet, ikke trykt. Få et estimat på 30 sekunder.</p>
+  </div>
+
+  <!-- ===================== KONFIGURATOR-MODUL START ===================== -->
+  <div class="jsk" data-jsk>
+    <div class="jsk__card">
+
+      <span class="jsk__eyebrow">🧶 B2B Jule-Konfigurator</span>
+
+      <!-- Progress -->
+      <div class="jsk__progress" aria-hidden="true">
+        <div class="jsk__progress-track"><div class="jsk__progress-fill"></div></div>
+        <div class="jsk__progress-labels">
+          <span>Segment</span>
+          <span>Materiale</span>
+          <span>Timing</span>
+          <span>Design</span>
+        </div>
+      </div>
+
+      <!-- ============ TRIN 1 ============ -->
+      <section class="jsk__step is-active" data-step="1" aria-label="Trin 1: Segment og volumen">
+        <div class="jsk__step-no">Trin 1 af 4</div>
+        <h2 class="jsk__q">Hvem skal have glæde af trøjerne, og hvor mange skal I ca. bruge?</h2>
+
+        <div class="jsk__options">
+          <button type="button" class="jsk__option" data-segment="company">
+            <span class="jsk__option-check">✓</span>
+            <span class="jsk__option-emoji">🏢</span>
+            <span class="jsk__option-title">Vores medarbejdere</span>
+            <span class="jsk__option-sub">Virksomhed — julegaver &amp; firmaånd</span>
+          </button>
+          <button type="button" class="jsk__option" data-segment="club">
+            <span class="jsk__option-check">✓</span>
+            <span class="jsk__option-emoji">⚽</span>
+            <span class="jsk__option-title">Vores fans og medlemmer</span>
+            <span class="jsk__option-sub">Sportsklub — merchandise med profit</span>
+          </button>
+        </div>
+
+        <div class="jsk__slider-wrap">
+          <div class="jsk__slider-top">
+            <span class="jsk__slider-label">Cirka antal trøjer</span>
+            <span class="jsk__slider-value" id="jsk-vol-value">500 <small>stk.</small></span>
+          </div>
+          <input type="range" class="jsk__range" min="100" max="5000" step="50" value="500"
+                 aria-label="Antal trøjer">
+          <div class="jsk__range-ends"><span>100 stk.</span><span>5.000+ stk.</span></div>
+        </div>
+
+        <div class="jsk__learn" style="display:none">
+          <span class="jsk__learn-icon">💡</span>
+          <span class="jsk__learn-body" id="jsk-learn-1"></span>
+        </div>
+
+        <div class="jsk__nav">
+          <span></span>
+          <button type="button" class="jsk__btn jsk__btn--primary jsk__next" disabled>Næste trin →</button>
+        </div>
+      </section>
+
+      <!-- ============ TRIN 2 ============ -->
+      <section class="jsk__step" data-step="2" aria-label="Trin 2: Materiale og CSR">
+        <div class="jsk__step-no">Trin 2 af 4</div>
+        <h2 class="jsk__q">Hvilken kvalitet og klimaprofil passer bedst til jeres brand?</h2>
+
+        <div class="jsk__options">
+          <button type="button" class="jsk__option" data-material="gots">
+            <span class="jsk__option-check">✓</span>
+            <span class="jsk__option-emoji">🌱</span>
+            <span class="jsk__option-title">100% Økologisk GOTS-bomuld</span>
+            <span class="jsk__option-sub">Blød, kradser ikke — perfekt til kontoret</span>
+          </button>
+          <button type="button" class="jsk__option" data-material="rpet">
+            <span class="jsk__option-check">✓</span>
+            <span class="jsk__option-emoji">♻️</span>
+            <span class="jsk__option-title">100% Genanvendt plast (rPET)</span>
+            <span class="jsk__option-sub">Skrigende, holdbare farver til klublogoer</span>
+          </button>
+        </div>
+
+        <div class="jsk__learn">
+          <span class="jsk__learn-icon">🧵</span>
+          <span class="jsk__learn-body">
+            En julesweater er ikke bare en 'gag' længere. <strong>GOTS-bomuld</strong> kradser ikke og er perfekt til kontorbrug.
+            <strong>rPET</strong> giver de mest skrigende og holdbare farver til komplekse klublogoer.
+            Begge valg styrker jeres <strong>ESG-afrapportering</strong>.
+          </span>
+        </div>
+
+        <div class="jsk__nav">
+          <button type="button" class="jsk__btn jsk__btn--ghost jsk__prev">← Tilbage</button>
+          <button type="button" class="jsk__btn jsk__btn--primary jsk__next" disabled>Næste trin →</button>
+        </div>
+      </section>
+
+      <!-- ============ TRIN 3 ============ -->
+      <section class="jsk__step" data-step="3" aria-label="Trin 3: Timing">
+        <div class="jsk__step-no">Trin 3 af 4</div>
+        <h2 class="jsk__q">Hvornår forventer I at uddele eller sælge trøjerne?</h2>
+
+        <div class="jsk__months">
+          <button type="button" class="jsk__month" data-month="August">August</button>
+          <button type="button" class="jsk__month" data-month="September">September</button>
+          <button type="button" class="jsk__month" data-month="Oktober">Oktober</button>
+          <button type="button" class="jsk__month" data-month="November">November</button>
+          <button type="button" class="jsk__month" data-month="December">December</button>
+        </div>
+
+        <div class="jsk__learn">
+          <span class="jsk__learn-icon">🧶</span>
+          <span class="jsk__learn-body">
+            Vores trøjer er <strong>ægte jacquardstrikket</strong> tråd for tråd – ikke bare trykt.
+            Det tager tid at få detaljerne perfekte. Bestiller I før september, kan vi bruge langsommere fragt,
+            hvilket sparer både <strong>penge og CO2</strong>.
+          </span>
+        </div>
+
+        <div class="jsk__nav">
+          <button type="button" class="jsk__btn jsk__btn--ghost jsk__prev">← Tilbage</button>
+          <button type="button" class="jsk__btn jsk__btn--primary jsk__next" disabled>Næste trin →</button>
+        </div>
+      </section>
+
+      <!-- ============ TRIN 4 ============ -->
+      <section class="jsk__step" data-step="4" aria-label="Trin 4: Visuel præference">
+        <div class="jsk__step-no">Trin 4 af 4</div>
+        <h2 class="jsk__q">Vælg jeres primære brand-farve og upload logo <span style="font-weight:500;color:#6B6B6B">(valgfrit)</span></h2>
+
+        <div class="jsk__swatches">
+          <button type="button" class="jsk__swatch" style="background:#BC3A35" data-color="#BC3A35" aria-label="Rød"></button>
+          <button type="button" class="jsk__swatch" style="background:#0E6E63" data-color="#0E6E63" aria-label="Grøn"></button>
+          <button type="button" class="jsk__swatch" style="background:#1E3A8A" data-color="#1E3A8A" aria-label="Marineblå"></button>
+          <button type="button" class="jsk__swatch" style="background:#2E7DD1" data-color="#2E7DD1" aria-label="Blå"></button>
+          <button type="button" class="jsk__swatch" style="background:#E6B400" data-color="#E6B400" aria-label="Gul"></button>
+          <button type="button" class="jsk__swatch" style="background:#C480C1" data-color="#C480C1" aria-label="Lyserød"></button>
+          <button type="button" class="jsk__swatch" style="background:#1C1C1C" data-color="#1C1C1C" aria-label="Sort"></button>
+          <button type="button" class="jsk__swatch" style="background:#FFFFFF;box-shadow:0 0 0 2px #E7E2DA" data-color="#FFFFFF" aria-label="Hvid"></button>
+          <label class="jsk__swatch-custom" title="Vælg din egen farve">＋
+            <input type="color" id="jsk-custom-color" value="#BC3A35">
+          </label>
+        </div>
+
+        <div class="jsk__drop">
+          <input type="file" id="jsk-logo" accept="image/*">
+          <div class="jsk__drop-default">
+            <div class="jsk__drop-icon">⬆️</div>
+            <div class="jsk__drop-text"><strong>Træk jeres logo hertil</strong> eller klik for at uploade (PNG, JPG, SVG)</div>
+          </div>
+          <div class="jsk__drop-preview">
+            <img src="" alt="Logo-forhåndsvisning">
+            <span></span>
+          </div>
+        </div>
+
+        <div class="jsk__learn">
+          <span class="jsk__learn-icon">✨</span>
+          <span class="jsk__learn-body">
+            Modsat billigt print-merchandise bliver jeres logo <strong>vævet direkte ind i stoffet</strong>.
+            Det krakelerer aldrig i vask.
+          </span>
+        </div>
+
+        <div class="jsk__nav">
+          <button type="button" class="jsk__btn jsk__btn--ghost jsk__prev">← Tilbage</button>
+          <button type="button" class="jsk__btn jsk__btn--primary jsk__next jsk__btn--big" disabled>Se beregning →</button>
+        </div>
+      </section>
+
+      <!-- ============ RESULTAT ============ -->
+      <section class="jsk__result" aria-label="Resultat og prisestimat">
+        <div class="jsk__result-head">
+          <span class="jsk__eyebrow">✅ Jeres skræddersyede estimat</span>
+          <h2>Her er jeres julesweater-beregning</h2>
+          <p>Helt uforpligtende — ingen login eller betaling.</p>
+        </div>
+
+        <div class="jsk__price-card">
+          <div class="jsk__price-label">Estimeret pris pr. stk.</div>
+          <div class="jsk__price-big" id="jsk-unit-price">135 <small>kr.</small></div>
+          <div class="jsk__price-meta">ekskl. moms — jacquardstrikket &amp; logo vævet ind</div>
+        </div>
+        <p style="text-align:center;color:#6B6B6B;font-size:.88rem;margin:10px 0 0" id="jsk-total-est"></p>
+
+        <div class="jsk__result-grid">
+          <div class="jsk__rcard jsk__rcard--eco" id="jsk-eco">
+            <h3>🌱 Klima-impact</h3>
+            <div class="jsk__rbig"></div>
+            <p></p>
+          </div>
+          <div class="jsk__rcard jsk__rcard--profit" id="jsk-profit" style="display:none">
+            <h3>💰 Estimeret klubfortjeneste</h3>
+            <div class="jsk__rbig"></div>
+            <p></p>
+          </div>
+        </div>
+
+        <div class="jsk__summary"></div>
+
+        <div style="text-align:center;margin-top:18px">
+          <button type="button" class="jsk__btn jsk__btn--ghost jsk__edit">← Ret mine valg</button>
+        </div>
+
+        <!-- Lead capture -->
+        <div class="jsk__lead">
+          <h2>🎁 Få 3 gratis, unikke designudkast i jeres farver</h2>
+          <p>Vores designere laver 3 forslag direkte på jeres brandfarve og logo — helt gratis og uforpligtende.</p>
+
+          <form class="jsk__lead-form" novalidate>
+            <div class="jsk__fields">
+              <div class="jsk__field">
+                <label for="jsk-navn">Navn</label>
+                <input id="jsk-navn" name="navn" type="text" placeholder="Dit navn" required>
+              </div>
+              <div class="jsk__field">
+                <label for="jsk-firma">Virksomhed / Klubnavn</label>
+                <input id="jsk-firma" name="firma" type="text" placeholder="Fx Aarhus FF" required>
+              </div>
+              <div class="jsk__field">
+                <label for="jsk-email">E-mail</label>
+                <input id="jsk-email" name="email" type="email" placeholder="navn@firma.dk" required>
+              </div>
+              <div class="jsk__field">
+                <label for="jsk-telefon">Telefonnummer</label>
+                <input id="jsk-telefon" name="telefon" type="tel" placeholder="+45 12 34 56 78" required>
+              </div>
+            </div>
+            <button type="submit" class="jsk__btn jsk__btn--primary jsk__btn--block jsk__btn--big">
+              FÅ MINE 3 DESIGNS (GRATIS &amp; UFORPLIGTENDE)
+            </button>
+            <p class="jsk__lead-fine">🔒 Vi sælger aldrig dine data. Du hører fra os inden for 1 hverdag.</p>
+          </form>
+
+          <div class="jsk__thanks">
+            <div class="jsk__thanks-emoji">🎉</div>
+            <h3>Tak! Vi er i gang.</h3>
+            <p style="opacity:.92;margin:0">Jeres 3 designudkast lander i indbakken inden for 1 hverdag.</p>
+          </div>
+        </div>
+
+        <button type="button" class="jsk__restart">Start forfra</button>
+      </section>
+
+    </div>
+  </div>
+  <!-- ===================== KONFIGURATOR-MODUL SLUT ===================== -->
+
+  <script src="assets/julekonfigurator.js"></script>
+</body>
+</html>
