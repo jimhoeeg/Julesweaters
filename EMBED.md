@@ -9,6 +9,7 @@ Ingen frameworks, ingen build, ingen afhængigheder.
 | `index.html` | Komplet demo-side — åbn i browseren for at se modulet live |
 | `assets/julekonfigurator.css` | Al styling (scopet under `.jsk` — kolliderer ikke med dit tema) |
 | `assets/julekonfigurator.js` | Al logik (auto-initialiserer alle `[data-jsk]`-elementer) |
+| `assets/happy-seasons-logo.png` | Brand-logo vist øverst i modulet (skift stien i `<img class="jsk__logo">`) |
 
 ## Sådan tester du lokalt
 Åbn `index.html` direkte i en browser — eller kør en lille server:

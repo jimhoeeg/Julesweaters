@@ -64,6 +64,13 @@
   background: linear-gradient(90deg, var(--jsk-sage), var(--jsk-teal));
 }
 
+/* ---------- Brand-logo ---------- */
+.jsk__logo {
+  display: block;
+  height: 52px; width: auto; max-width: 70%;
+  margin: 4px auto 22px;
+}
+
 /* ---------- Header / eyebrow ---------- */
 .jsk__eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
@@ -349,6 +356,7 @@
 @media (max-width: 600px) {
   .jsk { padding: 4px 10px 32px; }
   .jsk__card { padding: 26px 20px 30px; border-radius: 22px; }
+  .jsk__logo { height: 42px; margin-bottom: 18px; }
   .jsk__q { font-size: 1.3rem; }
   .jsk__options, .jsk__result-grid, .jsk__fields { grid-template-columns: 1fr; }
   .jsk__progress-labels span { font-size: .64rem; }
