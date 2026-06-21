@@ -64,11 +64,16 @@
   background: linear-gradient(90deg, var(--jsk-sage), var(--jsk-teal));
 }
 
-/* ---------- Brand-logo ---------- */
-.jsk__logo {
-  display: block;
-  height: 52px; width: auto; max-width: 70%;
-  margin: 4px auto 22px;
+/* ---------- Brand-bar (logo udenfor boksen, venstrestillet) ---------- */
+.jsk__brandbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 4px 14px;
+}
+.jsk__logo { height: 34px; width: auto; display: block; }
+.jsk__brandbar-tag {
+  font-size: .72rem; font-weight: 600; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--jsk-muted);
+  padding-left: 12px; border-left: 2px solid var(--jsk-line);
 }
 
 /* ---------- Header / eyebrow ---------- */
@@ -121,8 +126,9 @@
   color: var(--jsk-ink); margin: 0 0 22px;
 }
 
-/* ---------- Valg-kasser (segment / materiale) ---------- */
+/* ---------- Valg-kasser (segment / materiale / produkt) ---------- */
 .jsk__options { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.jsk__options--grid { grid-template-columns: repeat(2, 1fr); }
 .jsk__option {
   position: relative; text-align: left; cursor: pointer;
   background: var(--jsk-white);
@@ -294,12 +300,17 @@
 .jsk__price-big small { font-size: 1.1rem; font-weight: 600; }
 .jsk__price-meta { font-size: .85rem; opacity: .85; }
 
-.jsk__result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+.jsk__result-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px; margin-top: 18px;
+}
 .jsk__rcard {
   border: 1px solid var(--jsk-line); border-radius: var(--jsk-radius);
   padding: 20px 22px; background: #fff;
 }
 .jsk__rcard--eco    { background: var(--jsk-sage-tint); border-color: #D4E6D9; }
+.jsk__rcard--csr    { background: var(--jsk-red-tint);  border-color: #F2C7C4; }
+.jsk__rcard--csr .jsk__rbig { color: var(--jsk-red); }
 .jsk__rcard--profit { background: var(--jsk-beige); border-color: #E9D6AE; }
 .jsk__rcard h3 { font-size: .95rem; margin: 0 0 6px; color: var(--jsk-ink); display: flex; align-items: center; gap: 8px; }
 .jsk__rcard .jsk__rbig { font-size: 1.5rem; font-weight: 800; color: var(--jsk-teal-dark); font-variant-numeric: tabular-nums; }
@@ -321,19 +332,44 @@
   box-shadow: 0 14px 34px rgba(188,58,53,.3);
 }
 .jsk__lead h2 { font-size: 1.45rem; font-weight: 800; margin: 0 0 6px; }
-.jsk__lead p  { margin: 0 0 22px; opacity: .92; font-size: .95rem; }
+.jsk__lead p  { margin: 0 0 16px; opacity: .92; font-size: .95rem; }
+
+.jsk__lead-perks {
+  list-style: none; margin: 0 0 22px; padding: 0;
+  display: flex; flex-wrap: wrap; gap: 8px 18px;
+  font-size: .86rem; font-weight: 500;
+}
+.jsk__lead-perks li { display: flex; align-items: center; gap: 6px; }
+
 .jsk__fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .jsk__field { display: flex; flex-direction: column; gap: 6px; }
+.jsk__field--full { grid-column: 1 / -1; }
 .jsk__field label { font-size: .82rem; font-weight: 500; opacity: .92; }
-.jsk__field input {
+.jsk__field .jsk__opt { opacity: .7; font-weight: 400; }
+.jsk__field input,
+.jsk__field select,
+.jsk__field textarea {
   font-family: inherit; font-size: 1rem; color: var(--jsk-ink);
   background: #fff; border: 2px solid transparent; border-radius: var(--jsk-radius-sm);
   padding: 13px 16px; outline: none; transition: border-color .2s var(--jsk-ease);
   width: 100%;
 }
-.jsk__field input::placeholder { color: #A9A9A9; }
-.jsk__field input:focus { border-color: var(--jsk-coral); }
+.jsk__field textarea { resize: vertical; min-height: 76px; line-height: 1.5; }
+.jsk__field input::placeholder,
+.jsk__field textarea::placeholder { color: #A9A9A9; }
+.jsk__field input:focus,
+.jsk__field select:focus,
+.jsk__field textarea:focus { border-color: var(--jsk-coral); }
 .jsk__field input:invalid:not(:placeholder-shown) { border-color: #F2C0BD; }
+
+.jsk__check {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin-top: 14px; font-size: .88rem; cursor: pointer; line-height: 1.45;
+}
+.jsk__check input {
+  width: 20px; height: 20px; margin: 1px 0 0; flex: none;
+  accent-color: var(--jsk-coral); cursor: pointer;
+}
 .jsk__lead .jsk__btn--primary { margin-top: 20px; background: var(--jsk-coral); }
 .jsk__lead .jsk__btn--primary:hover { background: var(--jsk-coral-dark); }
 .jsk__lead-fine { text-align: center; font-size: .78rem; opacity: .85; margin: 14px 0 0; }
@@ -356,7 +392,8 @@
 @media (max-width: 600px) {
   .jsk { padding: 4px 10px 32px; }
   .jsk__card { padding: 26px 20px 30px; border-radius: 22px; }
-  .jsk__logo { height: 42px; margin-bottom: 18px; }
+  .jsk__logo { height: 28px; }
+  .jsk__options--grid { grid-template-columns: 1fr; }
   .jsk__q { font-size: 1.3rem; }
   .jsk__options, .jsk__result-grid, .jsk__fields { grid-template-columns: 1fr; }
   .jsk__progress-labels span { font-size: .64rem; }

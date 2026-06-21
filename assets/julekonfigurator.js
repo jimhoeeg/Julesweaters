@@ -10,11 +10,20 @@
   var daDK = new Intl.NumberFormat('da-DK');
   function fmt(n) { return daDK.format(Math.round(n)); }
 
-  /* Pris pr. stk: 249 kr v. 100 stk → falder lineært til 135 kr v. 1000+ stk */
-  function pricePerUnit(vol) {
+  /* Basispris pr. stk: 249 kr v. 100 stk → falder lineært til 135 kr v. 1000+ stk */
+  function basePrice(vol) {
     if (vol <= 100)  return 249;
     if (vol >= 1000) return 135;
-    return Math.round(249 - (249 - 135) * ((vol - 100) / (1000 - 100)));
+    return 249 - (249 - 135) * ((vol - 100) / (1000 - 100));
+  }
+
+  /* Produkt-prisfaktor — sæt/strik koster mere, t-shirts mindre */
+  var PRODUCT_FACTOR = { sweater: 1, pyjamas: 1.25, paaske: 0.95, sommer: 0.8 };
+  var PRODUCT_LABEL  = { sweater: 'Julesweater', pyjamas: 'Jule- & nattøjssæt', paaske: 'Påske-kollektion', sommer: 'Sommer & hyggetøj' };
+
+  function pricePerUnit(vol, product) {
+    var factor = PRODUCT_FACTOR[product] || 1;
+    return Math.round(basePrice(vol) * factor);
   }
 
   function init(root) {
@@ -25,12 +34,13 @@
     var state = {
       segment:  null,   // 'company' | 'club'
       volume:   500,
+      product:  null,   // 'sweater' | 'pyjamas' | 'paaske' | 'sommer'
       material: null,   // 'gots' | 'rpet'
       month:    null,
       color:    null
     };
 
-    var TOTAL_STEPS = 4;
+    var TOTAL_STEPS = 5;
     var current = 1;
 
     /* ---- Elementer ---- */
@@ -64,9 +74,10 @@
     /* Aktivér/deaktivér "Næste"-knapper alt efter om trinnet er udfyldt */
     function stepComplete(n) {
       if (n === 1) return !!state.segment;
-      if (n === 2) return !!state.material;
-      if (n === 3) return !!state.month;
-      if (n === 4) return !!state.color;
+      if (n === 2) return !!state.product;
+      if (n === 3) return !!state.material;
+      if (n === 4) return !!state.month;
+      if (n === 5) return !!state.color;
       return true;
     }
     function updateNavState() {
@@ -92,8 +103,8 @@
        =========================================================== */
     var learn1 = $('#jsk-learn-1');
     var LEARN = {
-      company: '<strong>Vidste du,</strong> at medarbejdergaver, der kan bruges socialt på kontoret, øger følelsen af tilhørsforhold med op til <strong>40%</strong>? Vores minimumsordre er sat helt ned til 100 stk., så alle kan være med.',
-      club:    'Julesweatre er i <strong>top-3</strong> over bedst sælgende fanklub-merchandise i Q4. Det giver høj værdi for fans og en markant bedre profitmargin end standard t-shirts.'
+      company: '<strong>Vidste du,</strong> at medarbejdergaver, der kan bruges socialt på kontoret, øger følelsen af tilhørsforhold med op til <strong>40%</strong>? Og via Happy Seasons’ <strong>Red Barnet-samarbejde</strong> donerer I samtidig et måltid til en familie i nød for hvert stk. — en CSR-historie I kan dele med hele organisationen.',
+      club:    'Branded tøj er i <strong>top-3</strong> over bedst sælgende fanklub-merchandise. Det giver høj værdi for fans og en markant bedre profitmargin end standard t-shirts — og styrker klubbens identitet hele året.'
     };
 
     $$('[data-segment]').forEach(function (opt) {
@@ -118,7 +129,19 @@
     renderVolume();
 
     /* ===========================================================
-       TRIN 2 — Materiale & CSR
+       TRIN 2 — Produkt
+       =========================================================== */
+    $$('[data-product]').forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        state.product = opt.dataset.product;
+        $$('[data-product]').forEach(function (o) { o.classList.remove('is-selected'); });
+        opt.classList.add('is-selected');
+        updateNavState();
+      });
+    });
+
+    /* ===========================================================
+       TRIN 3 — Materiale & CSR
        =========================================================== */
     $$('[data-material]').forEach(function (opt) {
       opt.addEventListener('click', function () {
@@ -130,7 +153,7 @@
     });
 
     /* ===========================================================
-       TRIN 3 — Timing
+       TRIN 4 — Timing
        =========================================================== */
     $$('[data-month]').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -142,7 +165,7 @@
     });
 
     /* ===========================================================
-       TRIN 4 — Visuel præference (farve + logo)
+       TRIN 5 — Visuel præference (farve + logo)
        =========================================================== */
     $$('.jsk__swatch').forEach(function (sw) {
       sw.addEventListener('click', function () {
@@ -203,13 +226,15 @@
        =========================================================== */
     function showResult() {
       var vol   = state.volume;
-      var unit  = pricePerUnit(vol);
+      var unit  = pricePerUnit(vol, state.product);
 
-      /* Pris */
+      /* Titel + pris */
+      var prodLabel = PRODUCT_LABEL[state.product] || 'tøj';
+      $('#jsk-result-title').textContent = 'Her er jeres ' + prodLabel.toLowerCase() + '-beregning';
       $('#jsk-unit-price').innerHTML = fmt(unit) + ' <small>kr.</small>';
       $('#jsk-total-est').textContent =
         'Estimeret samlet ordre: ' + fmt(unit * vol) + ' kr. ekskl. moms (' +
-        (vol >= 5000 ? '5.000+' : fmt(vol)) + ' stk.)';
+        (vol >= 5000 ? '5.000+' : fmt(vol)) + ' stk. ' + prodLabel.toLowerCase() + ')';
 
       /* Klima-impact */
       var eco = $('#jsk-eco');
@@ -224,19 +249,24 @@
         eco.querySelector('p').textContent = 'I sikrer 100% kemikaliefri produktion i GOTS-bomuld — blød mod huden og perfekt til kontorbrug.';
       }
 
+      /* Red Barnet / CSR-impact — 1 doneret måltid pr. stk. */
+      var csr = $('#jsk-csr');
+      csr.querySelector('.jsk__rbig').textContent = fmt(vol) + ' måltider';
+      csr.querySelector('p').textContent =
+        'Med jeres ordre donerer Happy Seasons ca. ' + fmt(vol) +
+        ' måltider til familier i nød via Red Barnet-samarbejdet.';
+
       /* Profit (kun sportsklub) */
       var profit = $('#jsk-profit');
       if (state.segment === 'club') {
-        var perUnitProfit = 399 - unit;
+        var perUnitProfit = Math.max(399 - unit, 0);
         profit.style.display = '';
         profit.querySelector('.jsk__rbig').textContent = fmt(perUnitProfit * vol) + ' kr.';
         profit.querySelector('p').textContent =
-          'Sælger I trøjerne til 399 kr. i fanshoppen, er jeres estimerede klubfortjeneste ' +
+          'Sælger I til 399 kr. i fanshoppen, er jeres estimerede klubfortjeneste ' +
           fmt(perUnitProfit) + ' kr. pr. stk.';
-        $('.jsk__result-grid').classList.add('jsk--has-profit');
       } else {
         profit.style.display = 'none';
-        $('.jsk__result-grid').classList.remove('jsk--has-profit');
       }
 
       /* Opsummering-chips */
@@ -245,10 +275,17 @@
       var chips = $('.jsk__summary');
       chips.innerHTML =
         chip('👥', segLabel) +
+        chip('👕', PRODUCT_LABEL[state.product] || '') +
         chip('📦', (vol >= 5000 ? '5.000+' : fmt(vol)) + ' stk.') +
         chip('🧵', matLabel) +
         (state.month ? chip('🗓️', state.month) : '') +
         (state.color ? '<span class="jsk__chip"><span style="width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid #ccc;background:' + state.color + '"></span>Brandfarve</span>' : '');
+
+      /* Forhåndsudfyld B2B-formularen med konfigurationen */
+      if (form) {
+        if (form.elements['antal'])    form.elements['antal'].value = vol;
+        if (form.elements['levering'] && state.month) form.elements['levering'].value = state.month;
+      }
 
       /* Vis */
       steps.forEach(function (s) { s.classList.remove('is-active'); });
@@ -273,15 +310,29 @@
     if (form) {
       form.addEventListener('submit', function (e) {
         e.preventDefault();
+
+        /* Simpel HTML5-validering inkl. påkrævet samtykke */
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+
+        var val = function (n) { return form.elements[n] ? form.elements[n].value.trim() : ''; };
         var lead = {
-          navn:     form.elements['navn'].value.trim(),
-          firma:    form.elements['firma'].value.trim(),
-          email:    form.elements['email'].value.trim(),
-          telefon:  form.elements['telefon'].value.trim(),
+          kontaktperson: val('navn'),
+          rolle:         val('rolle'),
+          firma:         val('firma'),
+          cvr:           val('cvr'),
+          email:         val('email'),
+          telefon:       val('telefon'),
+          ean:           val('ean'),
+          antal:         val('antal'),
+          leveringsperiode: val('levering'),
+          budget:        val('budget'),
+          besked:        val('besked'),
+          oensker_stofproeve: form.elements['proeve'] ? form.elements['proeve'].checked : false,
+          samtykke:      form.elements['samtykke'] ? form.elements['samtykke'].checked : false,
           konfiguration: {
-            segment: state.segment, volumen: state.volume,
+            segment: state.segment, volumen: state.volume, produkt: state.product,
             materiale: state.material, maaned: state.month,
-            farve: state.color, prisPrStk: pricePerUnit(state.volume)
+            farve: state.color, prisPrStk: pricePerUnit(state.volume, state.product)
           }
         };
 
@@ -301,7 +352,7 @@
     /* ---- Genstart ---- */
     var restart = $('.jsk__restart');
     if (restart) restart.addEventListener('click', function () {
-      state.segment = state.material = state.month = state.color = null;
+      state.segment = state.product = state.material = state.month = state.color = null;
       state.volume = 500;
       $$('.is-selected').forEach(function (el) { el.classList.remove('is-selected'); });
       if (learn1) { learn1.innerHTML = ''; learn1.parentElement.style.display = 'none'; }
