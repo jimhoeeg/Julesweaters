@@ -272,20 +272,77 @@
 
         <div class="jsk__summary"></div>
 
+        <!-- Tilvalg -->
+        <div class="jsk__addons-wrap">
+          <div class="jsk__addons-head">
+            <h3>✨ Tilvalg der giver mere værdi</h3>
+            <span>Vælg det I ønsker — påvirker estimatet</span>
+          </div>
+          <div class="jsk__addons">
+            <button type="button" class="jsk__addon" data-addon="kort" data-price="9">
+              <span class="jsk__addon-check">✓</span>
+              <span class="jsk__addon-title"><span class="jsk__addon-emoji">🎁</span>Personligt hilsen-kort</span>
+              <span class="jsk__addon-desc">Et lille kort med jeres egen hilsen i hver pakke</span>
+              <span class="jsk__addon-price">+9 kr./stk.</span>
+            </button>
+            <button type="button" class="jsk__addon" data-addon="gave" data-price="19">
+              <span class="jsk__addon-check">✓</span>
+              <span class="jsk__addon-title"><span class="jsk__addon-emoji">🎀</span>Individuel gaveindpakning</span>
+              <span class="jsk__addon-desc">Pakket og klar til at dele ud — ingen ekstra arbejde</span>
+              <span class="jsk__addon-price">+19 kr./stk.</span>
+            </button>
+            <button type="button" class="jsk__addon" data-addon="navn" data-price="29">
+              <span class="jsk__addon-check">✓</span>
+              <span class="jsk__addon-title"><span class="jsk__addon-emoji">🏷️</span>Navn &amp; nummer</span>
+              <span class="jsk__addon-desc">Individuelt navn/nr. på hver trøje — populært i klubber</span>
+              <span class="jsk__addon-price">+29 kr./stk.</span>
+            </button>
+            <button type="button" class="jsk__addon" data-addon="hjem" data-price="39">
+              <span class="jsk__addon-check">✓</span>
+              <span class="jsk__addon-title"><span class="jsk__addon-emoji">🚚</span>Levering til hjemmeadresser</span>
+              <span class="jsk__addon-desc">Vi sender direkte til hver medarbejder/medlem</span>
+              <span class="jsk__addon-price">+39 kr./stk.</span>
+            </button>
+            <button type="button" class="jsk__addon" data-addon="stoerrelse" data-price="0">
+              <span class="jsk__addon-check">✓</span>
+              <span class="jsk__addon-title"><span class="jsk__addon-emoji">📐</span>Digital størrelses-indsamling</span>
+              <span class="jsk__addon-desc">Vi indsamler størrelser via et link — færre returneringer</span>
+              <span class="jsk__addon-price">Gratis service</span>
+            </button>
+            <button type="button" class="jsk__addon" data-addon="lager" data-price="0">
+              <span class="jsk__addon-check">✓</span>
+              <span class="jsk__addon-title"><span class="jsk__addon-emoji">📦</span>Lagerføring + genbestilling</span>
+              <span class="jsk__addon-desc">Vi lagerfører jeres model — bestil flere online året rundt</span>
+              <span class="jsk__addon-price">Efter aftale</span>
+            </button>
+          </div>
+        </div>
+
         <div style="text-align:center;margin-top:18px">
           <button type="button" class="jsk__btn jsk__btn--ghost jsk__edit">← Ret mine valg</button>
         </div>
 
         <!-- Lead capture -->
         <div class="jsk__lead">
-          <h2>🎁 Få 3 gratis designudkast + et skarpt B2B-tilbud</h2>
-          <p>Udfyld herunder, så laver vores designere 3 forslag på jeres brandfarve og logo — og en B2B-kontaktperson vender tilbage med et mængdetilbud. Gratis og uforpligtende.</p>
+
+          <div class="jsk__mode" role="tablist" aria-label="Vælg næste skridt">
+            <button type="button" data-mode="pdf" class="is-active" role="tab">📩 Få designs &amp; PDF-estimat</button>
+            <button type="button" data-mode="meeting" role="tab">📅 Book et møde</button>
+          </div>
+
+          <h2 class="jsk__lead-title">🎁 Få 3 gratis designudkast + PDF-estimat</h2>
+          <p class="jsk__lead-desc">Udfyld herunder, så laver vores designere 3 forslag på jeres brandfarve og logo — og I får jeres estimat som PDF. Gratis og uforpligtende.</p>
 
           <ul class="jsk__lead-perks">
             <li>✏️ 3 unikke designudkast i jeres farver</li>
-            <li>👤 Fast B2B-kontaktperson</li>
+            <li>📄 Estimat &amp; tilvalg samlet i én PDF</li>
             <li>📦 Skarpt mængde- &amp; leveringstilbud</li>
           </ul>
+
+          <div class="jsk__meeting-note jsk__meeting-only" hidden>
+            <span>📅</span>
+            <span>Book et <strong>uforpligtende 20-min. online møde</strong> med en B2B-specialist, der gennemgår designs, priser og logistik live. Vælg et ønsket tidspunkt nedenfor — så sender vi en kalenderinvitation.</span>
+          </div>
 
           <form class="jsk__lead-form" novalidate>
             <div class="jsk__fields">
@@ -344,6 +401,17 @@
                   <option>Over 250 kr.</option>
                 </select>
               </div>
+              <div class="jsk__field jsk__field--full jsk__meeting-only" hidden>
+                <label for="jsk-moedetid">Ønsket mødetidspunkt</label>
+                <select id="jsk-moedetid" name="moedetid">
+                  <option value="">Vælg et tidspunkt der passer…</option>
+                  <option>Hverdag · morgen (8–10)</option>
+                  <option>Hverdag · formiddag (10–12)</option>
+                  <option>Hverdag · eftermiddag (12–15)</option>
+                  <option>Hverdag · sen eftermiddag (15–17)</option>
+                  <option>Jeg er fleksibel — ring og aftal</option>
+                </select>
+              </div>
               <div class="jsk__field jsk__field--full">
                 <label for="jsk-besked">Særlige ønsker / kommentar</label>
                 <textarea id="jsk-besked" name="besked" rows="3" placeholder="Fx deadline, antal størrelser, ønske om navn/nr. på ryggen, leveringsadresse…"></textarea>
@@ -359,7 +427,7 @@
               <span>Jeg accepterer, at Happy Seasons må kontakte mig om mit projekt. *</span>
             </label>
 
-            <button type="submit" class="jsk__btn jsk__btn--primary jsk__btn--block jsk__btn--big">
+            <button type="submit" class="jsk__btn jsk__btn--primary jsk__btn--block jsk__btn--big jsk__submit">
               FÅ MINE 3 DESIGNS (GRATIS &amp; UFORPLIGTENDE)
             </button>
             <p class="jsk__lead-fine">🔒 Vi sælger aldrig dine data. En B2B-konsulent vender tilbage inden for 1 hverdag.</p>
@@ -367,8 +435,8 @@
 
           <div class="jsk__thanks">
             <div class="jsk__thanks-emoji">🎉</div>
-            <h3>Tak! Vi er i gang.</h3>
-            <p style="opacity:.92;margin:0">Jeres 3 designudkast og et mængdetilbud lander i indbakken inden for 1 hverdag.</p>
+            <h3 class="jsk__thanks-title">Tak! Vi er i gang.</h3>
+            <p class="jsk__thanks-text" style="opacity:.92;margin:0">Jeres 3 designudkast og et mængdetilbud lander i indbakken inden for 1 hverdag.</p>
           </div>
         </div>
 

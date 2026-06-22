@@ -325,6 +325,62 @@
   display: inline-flex; align-items: center; gap: 6px;
 }
 
+/* ---------- Tilvalg (add-ons på resultatsiden) ---------- */
+.jsk__addons-wrap { margin-top: 26px; }
+.jsk__addons-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 8px; margin-bottom: 14px; flex-wrap: wrap;
+}
+.jsk__addons-head h3 { margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--jsk-ink); }
+.jsk__addons-head span { font-size: .84rem; color: var(--jsk-muted); }
+.jsk__addons {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px;
+}
+.jsk__addon {
+  position: relative; text-align: left; cursor: pointer; font-family: inherit; color: inherit;
+  background: #fff; border: 2px solid var(--jsk-line); border-radius: var(--jsk-radius);
+  padding: 16px 18px 16px 48px;
+  transition: border-color .2s var(--jsk-ease), box-shadow .2s var(--jsk-ease), background .2s var(--jsk-ease);
+  display: block;
+}
+.jsk__addon:hover { border-color: var(--jsk-coral); box-shadow: var(--jsk-shadow-sm); }
+.jsk__addon:focus-visible { outline: 3px solid var(--jsk-sage); outline-offset: 2px; }
+.jsk__addon.is-selected { border-color: var(--jsk-teal); background: var(--jsk-sage-tint); }
+.jsk__addon-check {
+  position: absolute; left: 16px; top: 17px;
+  width: 22px; height: 22px; border-radius: 7px;
+  border: 2px solid var(--jsk-line); background: #fff;
+  display: grid; place-items: center; color: #fff; font-size: .72rem;
+  transition: all .2s var(--jsk-ease);
+}
+.jsk__addon.is-selected .jsk__addon-check { background: var(--jsk-teal); border-color: var(--jsk-teal); }
+.jsk__addon-title { display: block; font-weight: 600; font-size: .98rem; color: var(--jsk-ink); }
+.jsk__addon-title .jsk__addon-emoji { margin-right: 6px; }
+.jsk__addon-desc  { display: block; font-size: .83rem; color: var(--jsk-muted); margin-top: 2px; }
+.jsk__addon-price {
+  display: inline-block; margin-top: 8px; font-size: .8rem; font-weight: 600;
+  color: var(--jsk-teal-dark); background: #fff; border: 1px solid #D4E6D9;
+  padding: 3px 10px; border-radius: var(--jsk-pill);
+}
+
+/* ---------- Vælger: PDF vs. møde ---------- */
+.jsk__mode {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  background: rgba(255,255,255,.18); border-radius: var(--jsk-pill);
+  padding: 5px; margin-bottom: 20px;
+}
+.jsk__mode button {
+  font-family: inherit; font-weight: 600; font-size: .9rem; color: #fff;
+  background: transparent; border: none; border-radius: var(--jsk-pill);
+  padding: 11px 10px; cursor: pointer; transition: background .2s var(--jsk-ease), color .2s var(--jsk-ease);
+}
+.jsk__mode button.is-active { background: #fff; color: var(--jsk-red); }
+.jsk__meeting-note {
+  display: flex; gap: 10px; align-items: flex-start;
+  background: rgba(255,255,255,.14); border-radius: var(--jsk-radius-sm);
+  padding: 12px 14px; margin-bottom: 16px; font-size: .86rem;
+}
+
 /* ---------- Lead capture ---------- */
 .jsk__lead {
   margin-top: 26px; background: var(--jsk-red);

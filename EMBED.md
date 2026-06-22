@@ -17,7 +17,15 @@ Ingen frameworks, ingen build, ingen afhængigheder.
 3. **Kvalitet & CSR** — GOTS-bomuld vs. rPET (+ Red Barnet-vinkel)
 4. **Timing** — Q1/Q2 + enkeltmåneder
 5. **Design** — brandfarve + valgfri logo-upload
-→ **Resultat:** pris pr. stk., klima-impact, Red Barnet-måltider, klub-profit (kun klub) + rig B2B-formular (CVR, EAN, rolle, budget, leveringsperiode, kommentar, samtykke).
+→ **Resultat:** pris pr. stk., klima-impact, Red Barnet-måltider, klub-profit (kun klub),
+  **tilvalg** (hilsen-kort, gaveindpakning, navn/nr., hjemmelevering, størrelses-indsamling,
+  lagerføring m. genbestilling — opdaterer estimatet live), og en rig B2B-formular med to spor:
+  **få designs+PDF tilsendt** eller **book et møde** med en B2B-specialist.
+
+## Mødebooking
+Sæt `BOOKING_URL` i toppen af `julekonfigurator.js` (fx jeres Calendly-link).
+Er den udfyldt, åbnes kalenderen i en ny fane ved "Book mit møde"; ellers vises blot en kvittering,
+og lead'et (inkl. ønsket mødetidspunkt) sendes via samme `submit`-flow som PDF-sporet.
 
 ## Sådan tester du lokalt
 Åbn `index.html` direkte i en browser — eller kør en lille server:

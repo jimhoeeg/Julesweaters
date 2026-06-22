@@ -20,6 +20,10 @@
   /* Produkt-prisfaktor — sæt/strik koster mere, t-shirts mindre */
   var PRODUCT_FACTOR = { sweater: 1, pyjamas: 1.25, paaske: 0.95, sommer: 0.8 };
   var PRODUCT_LABEL  = { sweater: 'Julesweater', pyjamas: 'Jule- & nattøjssæt', paaske: 'Påske-kollektion', sommer: 'Sommer & hyggetøj' };
+  var ADDON_LABEL    = { kort: 'Personligt hilsen-kort', gave: 'Individuel gaveindpakning', navn: 'Navn & nummer', hjem: 'Levering til hjemmeadresser', stoerrelse: 'Digital størrelses-indsamling', lager: 'Lagerføring + genbestilling' };
+
+  /* Sæt jeres booking-link (fx Calendly). Er den tom, vises blot en kvittering. */
+  var BOOKING_URL = '';
 
   function pricePerUnit(vol, product) {
     var factor = PRODUCT_FACTOR[product] || 1;
@@ -37,11 +41,16 @@
       product:  null,   // 'sweater' | 'pyjamas' | 'paaske' | 'sommer'
       material: null,   // 'gots' | 'rpet'
       month:    null,
-      color:    null
+      color:    null,
+      addons:   [],     // ['kort','lager', …]
+      mode:     'pdf'   // 'pdf' | 'meeting'
     };
 
     var TOTAL_STEPS = 5;
     var current = 1;
+
+    /* Gemmes fra showResult, så tilvalg kan genberegne totalen live */
+    var calc = { unit: 0, vol: 0, prodLower: '' };
 
     /* ---- Elementer ---- */
     var fill      = $('.jsk__progress-fill');
@@ -222,6 +231,75 @@
     }
 
     /* ===========================================================
+       TILVALG (add-ons) — opdaterer estimatet live
+       =========================================================== */
+    function selectedAddons() {
+      return $$('.jsk__addon.is-selected').map(function (a) { return a.dataset.addon; });
+    }
+    function addonsPerUnit() {
+      return $$('.jsk__addon.is-selected').reduce(function (sum, a) {
+        return sum + (parseInt(a.dataset.price, 10) || 0);
+      }, 0);
+    }
+    function recomputeTotal() {
+      var add  = addonsPerUnit();
+      var eff  = calc.unit + add;
+      var volTxt = calc.vol >= 5000 ? '5.000+' : fmt(calc.vol);
+      var txt = 'Estimeret samlet ordre: ' + fmt(eff * calc.vol) + ' kr. ekskl. moms (' +
+                volTxt + ' stk. ' + calc.prodLower + ')';
+      if (add > 0) txt += ' · inkl. tilvalg (+' + fmt(add) + ' kr./stk.)';
+      $('#jsk-total-est').textContent = txt;
+    }
+
+    $$('.jsk__addon').forEach(function (a) {
+      a.setAttribute('aria-pressed', 'false');
+      a.addEventListener('click', function () {
+        var on = a.classList.toggle('is-selected');
+        a.setAttribute('aria-pressed', on ? 'true' : 'false');
+        state.addons = selectedAddons();
+        recomputeTotal();
+      });
+    });
+
+    /* ===========================================================
+       PDF vs. MØDE-bestilling
+       =========================================================== */
+    var MODE = {
+      pdf: {
+        title:  '🎁 Få 3 gratis designudkast + PDF-estimat',
+        desc:   'Udfyld herunder, så laver vores designere 3 forslag på jeres brandfarve og logo — og I får jeres estimat som PDF. Gratis og uforpligtende.',
+        submit: 'FÅ MINE 3 DESIGNS (GRATIS & UFORPLIGTENDE)'
+      },
+      meeting: {
+        title:  '📅 Book et møde med en B2B-specialist',
+        desc:   'En specialist gennemgår designs, priser og logistik live på et kort online møde — helt uforpligtende.',
+        submit: 'BOOK MIT MØDE (GRATIS & UFORPLIGTENDE)'
+      }
+    };
+    var leadTitle = $('.jsk__lead-title');
+    var leadDesc  = $('.jsk__lead-desc');
+    var leadPerks = $('.jsk__lead-perks');
+    var submitBtn = $('.jsk__submit');
+    var moedetid  = root.querySelector('[name="moedetid"]');
+
+    function setMode(mode) {
+      state.mode = mode;
+      $$('.jsk__mode button').forEach(function (b) {
+        b.classList.toggle('is-active', b.dataset.mode === mode);
+      });
+      leadTitle.textContent = MODE[mode].title;
+      leadDesc.textContent  = MODE[mode].desc;
+      submitBtn.textContent = MODE[mode].submit;
+      var meeting = mode === 'meeting';
+      $$('.jsk__meeting-only').forEach(function (el) { el.hidden = !meeting; });
+      if (leadPerks) leadPerks.style.display = meeting ? 'none' : '';
+      if (moedetid)  moedetid.required = meeting;
+    }
+    $$('.jsk__mode button').forEach(function (b) {
+      b.addEventListener('click', function () { setMode(b.dataset.mode); });
+    });
+
+    /* ===========================================================
        RESULTATSIDE
        =========================================================== */
     function showResult() {
@@ -232,9 +310,8 @@
       var prodLabel = PRODUCT_LABEL[state.product] || 'tøj';
       $('#jsk-result-title').textContent = 'Her er jeres ' + prodLabel.toLowerCase() + '-beregning';
       $('#jsk-unit-price').innerHTML = fmt(unit) + ' <small>kr.</small>';
-      $('#jsk-total-est').textContent =
-        'Estimeret samlet ordre: ' + fmt(unit * vol) + ' kr. ekskl. moms (' +
-        (vol >= 5000 ? '5.000+' : fmt(vol)) + ' stk. ' + prodLabel.toLowerCase() + ')';
+      calc.unit = unit; calc.vol = vol; calc.prodLower = prodLabel.toLowerCase();
+      recomputeTotal();
 
       /* Klima-impact */
       var eco = $('#jsk-eco');
@@ -316,6 +393,7 @@
 
         var val = function (n) { return form.elements[n] ? form.elements[n].value.trim() : ''; };
         var lead = {
+          type:          state.mode === 'meeting' ? 'mødebooking' : 'designs+pdf',
           kontaktperson: val('navn'),
           rolle:         val('rolle'),
           firma:         val('firma'),
@@ -327,12 +405,15 @@
           leveringsperiode: val('levering'),
           budget:        val('budget'),
           besked:        val('besked'),
+          moedetidspunkt: state.mode === 'meeting' ? val('moedetid') : '',
+          tilvalg:       state.addons.map(function (id) { return ADDON_LABEL[id] || id; }),
           oensker_stofproeve: form.elements['proeve'] ? form.elements['proeve'].checked : false,
           samtykke:      form.elements['samtykke'] ? form.elements['samtykke'].checked : false,
           konfiguration: {
             segment: state.segment, volumen: state.volume, produkt: state.product,
-            materiale: state.material, maaned: state.month,
-            farve: state.color, prisPrStk: pricePerUnit(state.volume, state.product)
+            materiale: state.material, maaned: state.month, farve: state.color,
+            prisPrStk: pricePerUnit(state.volume, state.product),
+            tilvalgPrStk: addonsPerUnit()
           }
         };
 
@@ -344,6 +425,26 @@
                                body: JSON.stringify(lead)});
         */
 
+        /* Mødebooking: åbn evt. eksternt booking-link (Calendly o.l.) */
+        var openedBooking = false;
+        if (state.mode === 'meeting' && BOOKING_URL) {
+          window.open(BOOKING_URL, '_blank', 'noopener');
+          openedBooking = true;
+        }
+
+        /* Tilpas kvittering efter valgt spor */
+        var tTitle = $('.jsk__thanks-title');
+        var tText  = $('.jsk__thanks-text');
+        if (state.mode === 'meeting') {
+          tTitle.textContent = 'Tak — vi glæder os til at tale med jer!';
+          tText.textContent = openedBooking
+            ? 'Vi har åbnet vores kalender i en ny fane — vælg det tidspunkt der passer jer.'
+            : 'En B2B-specialist sender en kalenderinvitation til ' + lead.email + ' for jeres ønskede tidspunkt.';
+        } else {
+          tTitle.textContent = 'Tak! Vi er i gang.';
+          tText.textContent = 'Jeres 3 designudkast og PDF-estimat lander i indbakken inden for 1 hverdag.';
+        }
+
         form.style.display = 'none';
         $('.jsk__thanks').classList.add('is-active');
       });
@@ -354,7 +455,10 @@
     if (restart) restart.addEventListener('click', function () {
       state.segment = state.product = state.material = state.month = state.color = null;
       state.volume = 500;
+      state.addons = [];
       $$('.is-selected').forEach(function (el) { el.classList.remove('is-selected'); });
+      $$('.jsk__addon').forEach(function (a) { a.setAttribute('aria-pressed', 'false'); });
+      setMode('pdf');
       if (learn1) { learn1.innerHTML = ''; learn1.parentElement.style.display = 'none'; }
       if (preview) preview.style.display = 'none';
       if (defaultDropText) defaultDropText.style.display = '';
@@ -365,6 +469,7 @@
     });
 
     /* ---- Init ---- */
+    setMode('pdf');
     showStep(1);
   }
 
