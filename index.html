@@ -322,121 +322,179 @@
           <button type="button" class="jsk__btn jsk__btn--ghost jsk__edit">← Ret mine valg</button>
         </div>
 
-        <!-- Lead capture -->
+        <!-- Lead capture — to adskilte spor -->
         <div class="jsk__lead">
 
           <div class="jsk__mode" role="tablist" aria-label="Vælg næste skridt">
-            <button type="button" data-mode="pdf" class="is-active" role="tab">📩 Få designs &amp; PDF-estimat</button>
-            <button type="button" data-mode="meeting" role="tab">📅 Book et møde</button>
+            <button type="button" data-mode="pdf" class="is-active" role="tab">📩 Send mig PDF</button>
+            <button type="button" data-mode="meeting" role="tab">📅 Book personligt møde</button>
           </div>
 
-          <h2 class="jsk__lead-title">🎁 Få 3 gratis designudkast + PDF-estimat</h2>
-          <p class="jsk__lead-desc">Udfyld herunder, så laver vores designere 3 forslag på jeres brandfarve og logo — og I får jeres estimat som PDF. Gratis og uforpligtende.</p>
+          <!-- ===== SPOR 1: PDF med designs + estimat ===== -->
+          <div class="jsk__panel" data-panel="pdf">
+            <h2 class="jsk__lead-title">📩 Få jeres designs &amp; estimat som PDF</h2>
+            <p class="jsk__lead-desc">Vores designere laver 3 forslag på jeres brandfarve og logo, og samler dem med jeres prisestimat i én PDF, der sendes til din mail. Gratis og uforpligtende.</p>
 
-          <ul class="jsk__lead-perks">
-            <li>✏️ 3 unikke designudkast i jeres farver</li>
-            <li>📄 Estimat &amp; tilvalg samlet i én PDF</li>
-            <li>📦 Skarpt mængde- &amp; leveringstilbud</li>
-          </ul>
+            <ul class="jsk__lead-perks">
+              <li>✏️ 3 unikke designudkast i jeres farver</li>
+              <li>📄 Estimat &amp; tilvalg samlet i én PDF</li>
+              <li>📦 Skarpt mængde- &amp; leveringstilbud</li>
+            </ul>
 
-          <div class="jsk__meeting-note jsk__meeting-only" hidden>
-            <span>📅</span>
-            <span>Book et <strong>uforpligtende 20-min. online møde</strong> med en B2B-specialist, der gennemgår designs, priser og logistik live. Vælg et ønsket tidspunkt nedenfor — så sender vi en kalenderinvitation.</span>
+            <form class="jsk__lead-form" data-type="pdf" novalidate>
+              <div class="jsk__fields">
+                <div class="jsk__field">
+                  <label for="jsk-navn">Kontaktperson *</label>
+                  <input id="jsk-navn" name="navn" type="text" placeholder="Dit navn" required>
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-rolle">Rolle / titel</label>
+                  <input id="jsk-rolle" name="rolle" type="text" placeholder="Fx HR-chef / kasserer">
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-firma">Virksomhed / Klubnavn *</label>
+                  <input id="jsk-firma" name="firma" type="text" placeholder="Fx Aarhus FF" required>
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-cvr">CVR-nummer *</label>
+                  <input id="jsk-cvr" name="cvr" type="text" inputmode="numeric" placeholder="8 cifre" required>
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-email">Arbejds-e-mail * <span class="jsk__opt">(PDF sendes hertil)</span></label>
+                  <input id="jsk-email" name="email" type="email" placeholder="navn@firma.dk" required>
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-telefon">Telefonnummer</label>
+                  <input id="jsk-telefon" name="telefon" type="tel" placeholder="+45 12 34 56 78">
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-ean">EAN-nummer <span class="jsk__opt">(til fakturering, valgfri)</span></label>
+                  <input id="jsk-ean" name="ean" type="text" inputmode="numeric" placeholder="13 cifre">
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-antal">Antal stk.</label>
+                  <input id="jsk-antal" name="antal" type="number" min="100" step="10" placeholder="500">
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-levering">Ønsket levering</label>
+                  <select id="jsk-levering" name="levering">
+                    <option value="">Vælg periode…</option>
+                    <option>Q1 (jan–mar)</option>
+                    <option>Q2 (apr–jun)</option>
+                    <option>August</option>
+                    <option>September</option>
+                    <option>Oktober</option>
+                    <option>November</option>
+                    <option>December</option>
+                  </select>
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-budget">Budget pr. stk. <span class="jsk__opt">(valgfri)</span></label>
+                  <select id="jsk-budget" name="budget">
+                    <option value="">Ikke fastlagt</option>
+                    <option>Under 150 kr.</option>
+                    <option>150–200 kr.</option>
+                    <option>200–250 kr.</option>
+                    <option>Over 250 kr.</option>
+                  </select>
+                </div>
+                <div class="jsk__field jsk__field--full">
+                  <label for="jsk-besked">Særlige ønsker / kommentar</label>
+                  <textarea id="jsk-besked" name="besked" rows="3" placeholder="Fx deadline, antal størrelser, ønske om navn/nr. på ryggen, leveringsadresse…"></textarea>
+                </div>
+              </div>
+
+              <label class="jsk__check">
+                <input type="checkbox" name="proeve" value="ja">
+                <span>Send mig gerne en gratis fysisk stofprøve først</span>
+              </label>
+              <label class="jsk__check">
+                <input type="checkbox" name="samtykke" value="ja" required>
+                <span>Jeg accepterer, at Happy Seasons må kontakte mig om mit projekt. *</span>
+              </label>
+
+              <button type="submit" class="jsk__btn jsk__btn--primary jsk__btn--block jsk__btn--big">
+                SEND MIG PDF MED DESIGNS &amp; ESTIMAT
+              </button>
+              <p class="jsk__lead-fine">🔒 Vi sælger aldrig dine data. Jeres PDF lander i indbakken inden for 1 hverdag.</p>
+            </form>
           </div>
 
-          <form class="jsk__lead-form" novalidate>
-            <div class="jsk__fields">
-              <div class="jsk__field">
-                <label for="jsk-navn">Kontaktperson *</label>
-                <input id="jsk-navn" name="navn" type="text" placeholder="Dit navn" required>
-              </div>
-              <div class="jsk__field">
-                <label for="jsk-rolle">Rolle / titel</label>
-                <input id="jsk-rolle" name="rolle" type="text" placeholder="Fx HR-chef / kasserer">
-              </div>
-              <div class="jsk__field">
-                <label for="jsk-firma">Virksomhed / Klubnavn *</label>
-                <input id="jsk-firma" name="firma" type="text" placeholder="Fx Aarhus FF" required>
-              </div>
-              <div class="jsk__field">
-                <label for="jsk-cvr">CVR-nummer *</label>
-                <input id="jsk-cvr" name="cvr" type="text" inputmode="numeric" placeholder="8 cifre" required>
-              </div>
-              <div class="jsk__field">
-                <label for="jsk-email">Arbejds-e-mail *</label>
-                <input id="jsk-email" name="email" type="email" placeholder="navn@firma.dk" required>
-              </div>
-              <div class="jsk__field">
-                <label for="jsk-telefon">Telefonnummer *</label>
-                <input id="jsk-telefon" name="telefon" type="tel" placeholder="+45 12 34 56 78" required>
-              </div>
-              <div class="jsk__field">
-                <label for="jsk-ean">EAN-nummer <span class="jsk__opt">(til fakturering, valgfri)</span></label>
-                <input id="jsk-ean" name="ean" type="text" inputmode="numeric" placeholder="13 cifre">
-              </div>
-              <div class="jsk__field">
-                <label for="jsk-antal">Antal stk.</label>
-                <input id="jsk-antal" name="antal" type="number" min="100" step="10" placeholder="500">
-              </div>
-              <div class="jsk__field">
-                <label for="jsk-levering">Ønsket levering</label>
-                <select id="jsk-levering" name="levering">
-                  <option value="">Vælg periode…</option>
-                  <option>Q1 (jan–mar)</option>
-                  <option>Q2 (apr–jun)</option>
-                  <option>August</option>
-                  <option>September</option>
-                  <option>Oktober</option>
-                  <option>November</option>
-                  <option>December</option>
-                </select>
-              </div>
-              <div class="jsk__field">
-                <label for="jsk-budget">Budget pr. stk. <span class="jsk__opt">(valgfri)</span></label>
-                <select id="jsk-budget" name="budget">
-                  <option value="">Ikke fastlagt</option>
-                  <option>Under 150 kr.</option>
-                  <option>150–200 kr.</option>
-                  <option>200–250 kr.</option>
-                  <option>Over 250 kr.</option>
-                </select>
-              </div>
-              <div class="jsk__field jsk__field--full jsk__meeting-only" hidden>
-                <label for="jsk-moedetid">Ønsket mødetidspunkt</label>
-                <select id="jsk-moedetid" name="moedetid">
-                  <option value="">Vælg et tidspunkt der passer…</option>
-                  <option>Hverdag · morgen (8–10)</option>
-                  <option>Hverdag · formiddag (10–12)</option>
-                  <option>Hverdag · eftermiddag (12–15)</option>
-                  <option>Hverdag · sen eftermiddag (15–17)</option>
-                  <option>Jeg er fleksibel — ring og aftal</option>
-                </select>
-              </div>
-              <div class="jsk__field jsk__field--full">
-                <label for="jsk-besked">Særlige ønsker / kommentar</label>
-                <textarea id="jsk-besked" name="besked" rows="3" placeholder="Fx deadline, antal størrelser, ønske om navn/nr. på ryggen, leveringsadresse…"></textarea>
-              </div>
-            </div>
+          <!-- ===== SPOR 2: Personligt møde ===== -->
+          <div class="jsk__panel" data-panel="meeting" hidden>
+            <h2 class="jsk__lead-title">📅 Book et personligt møde med en B2B-specialist</h2>
+            <p class="jsk__lead-desc">Få et uforpligtende personligt møde, hvor vi gennemgår designs, priser og logistik sammen. I taler direkte med en fast B2B-specialist — ingen PDF, men en rigtig dialog.</p>
 
-            <label class="jsk__check">
-              <input type="checkbox" name="proeve" value="ja">
-              <span>Send mig gerne en gratis fysisk stofprøve først</span>
-            </label>
-            <label class="jsk__check">
-              <input type="checkbox" name="samtykke" value="ja" required>
-              <span>Jeg accepterer, at Happy Seasons må kontakte mig om mit projekt. *</span>
-            </label>
+            <ul class="jsk__lead-perks">
+              <li>👤 Fast personlig B2B-specialist</li>
+              <li>🎨 Designs &amp; muligheder gennemgået live</li>
+              <li>🤝 Svar på alt om pris, logistik og deadlines</li>
+            </ul>
 
-            <button type="submit" class="jsk__btn jsk__btn--primary jsk__btn--block jsk__btn--big jsk__submit">
-              FÅ MINE 3 DESIGNS (GRATIS &amp; UFORPLIGTENDE)
-            </button>
-            <p class="jsk__lead-fine">🔒 Vi sælger aldrig dine data. En B2B-konsulent vender tilbage inden for 1 hverdag.</p>
-          </form>
+            <form class="jsk__lead-form" data-type="meeting" novalidate>
+              <div class="jsk__fields">
+                <div class="jsk__field">
+                  <label for="jsk-m-navn">Kontaktperson *</label>
+                  <input id="jsk-m-navn" name="navn" type="text" placeholder="Dit navn" required>
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-m-rolle">Rolle / titel</label>
+                  <input id="jsk-m-rolle" name="rolle" type="text" placeholder="Fx HR-chef / kasserer">
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-m-firma">Virksomhed / Klubnavn *</label>
+                  <input id="jsk-m-firma" name="firma" type="text" placeholder="Fx Aarhus FF" required>
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-m-email">Arbejds-e-mail *</label>
+                  <input id="jsk-m-email" name="email" type="email" placeholder="navn@firma.dk" required>
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-m-telefon">Telefonnummer *</label>
+                  <input id="jsk-m-telefon" name="telefon" type="tel" placeholder="+45 12 34 56 78" required>
+                </div>
+                <div class="jsk__field">
+                  <label for="jsk-m-form">Mødeform *</label>
+                  <select id="jsk-m-form" name="moedeform" required>
+                    <option value="">Vælg mødeform…</option>
+                    <option>Online (Teams / Zoom)</option>
+                    <option>Fysisk møde hos Happy Seasons</option>
+                    <option>I besøger os</option>
+                  </select>
+                </div>
+                <div class="jsk__field jsk__field--full">
+                  <label for="jsk-m-tid">Ønsket mødetidspunkt *</label>
+                  <select id="jsk-m-tid" name="moedetid" required>
+                    <option value="">Vælg et tidspunkt der passer…</option>
+                    <option>Hverdag · morgen (8–10)</option>
+                    <option>Hverdag · formiddag (10–12)</option>
+                    <option>Hverdag · eftermiddag (12–15)</option>
+                    <option>Hverdag · sen eftermiddag (15–17)</option>
+                    <option>Jeg er fleksibel — ring og aftal</option>
+                  </select>
+                </div>
+                <div class="jsk__field jsk__field--full">
+                  <label for="jsk-m-besked">Hvad vil I gerne tale om? <span class="jsk__opt">(valgfri)</span></label>
+                  <textarea id="jsk-m-besked" name="besked" rows="3" placeholder="Fx antal, deadline, særlige designønsker…"></textarea>
+                </div>
+              </div>
+
+              <label class="jsk__check">
+                <input type="checkbox" name="samtykke" value="ja" required>
+                <span>Jeg accepterer, at Happy Seasons må kontakte mig for at aftale mødet. *</span>
+              </label>
+
+              <button type="submit" class="jsk__btn jsk__btn--primary jsk__btn--block jsk__btn--big">
+                BOOK MIT PERSONLIGE MØDE
+              </button>
+              <p class="jsk__lead-fine">🔒 Vi sælger aldrig dine data. En B2B-specialist bekræfter mødet inden for 1 hverdag.</p>
+            </form>
+          </div>
 
           <div class="jsk__thanks">
             <div class="jsk__thanks-emoji">🎉</div>
             <h3 class="jsk__thanks-title">Tak! Vi er i gang.</h3>
-            <p class="jsk__thanks-text" style="opacity:.92;margin:0">Jeres 3 designudkast og et mængdetilbud lander i indbakken inden for 1 hverdag.</p>
+            <p class="jsk__thanks-text" style="opacity:.92;margin:0">Jeres PDF lander i indbakken inden for 1 hverdag.</p>
           </div>
         </div>
 

@@ -264,36 +264,22 @@
     /* ===========================================================
        PDF vs. MØDE-bestilling
        =========================================================== */
-    var MODE = {
-      pdf: {
-        title:  '🎁 Få 3 gratis designudkast + PDF-estimat',
-        desc:   'Udfyld herunder, så laver vores designere 3 forslag på jeres brandfarve og logo — og I får jeres estimat som PDF. Gratis og uforpligtende.',
-        submit: 'FÅ MINE 3 DESIGNS (GRATIS & UFORPLIGTENDE)'
-      },
-      meeting: {
-        title:  '📅 Book et møde med en B2B-specialist',
-        desc:   'En specialist gennemgår designs, priser og logistik live på et kort online møde — helt uforpligtende.',
-        submit: 'BOOK MIT MØDE (GRATIS & UFORPLIGTENDE)'
-      }
-    };
-    var leadTitle = $('.jsk__lead-title');
-    var leadDesc  = $('.jsk__lead-desc');
-    var leadPerks = $('.jsk__lead-perks');
-    var submitBtn = $('.jsk__submit');
-    var moedetid  = root.querySelector('[name="moedetid"]');
+    /* ===========================================================
+       To adskilte spor: PDF  vs.  personligt møde
+       =========================================================== */
+    var modeTabs = $('.jsk__mode');
+    var panels   = $$('.jsk__panel');
+    var pdfForm  = root.querySelector('.jsk__lead-form[data-type="pdf"]');
 
     function setMode(mode) {
       state.mode = mode;
       $$('.jsk__mode button').forEach(function (b) {
         b.classList.toggle('is-active', b.dataset.mode === mode);
       });
-      leadTitle.textContent = MODE[mode].title;
-      leadDesc.textContent  = MODE[mode].desc;
-      submitBtn.textContent = MODE[mode].submit;
-      var meeting = mode === 'meeting';
-      $$('.jsk__meeting-only').forEach(function (el) { el.hidden = !meeting; });
-      if (leadPerks) leadPerks.style.display = meeting ? 'none' : '';
-      if (moedetid)  moedetid.required = meeting;
+      panels.forEach(function (p) {
+        p.hidden = p.dataset.panel !== mode;
+        p.style.display = '';
+      });
     }
     $$('.jsk__mode button').forEach(function (b) {
       b.addEventListener('click', function () { setMode(b.dataset.mode); });
@@ -358,10 +344,10 @@
         (state.month ? chip('🗓️', state.month) : '') +
         (state.color ? '<span class="jsk__chip"><span style="width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid #ccc;background:' + state.color + '"></span>Brandfarve</span>' : '');
 
-      /* Forhåndsudfyld B2B-formularen med konfigurationen */
-      if (form) {
-        if (form.elements['antal'])    form.elements['antal'].value = vol;
-        if (form.elements['levering'] && state.month) form.elements['levering'].value = state.month;
+      /* Forhåndsudfyld PDF-formularen med konfigurationen */
+      if (pdfForm) {
+        if (pdfForm.elements['antal'])    pdfForm.elements['antal'].value = vol;
+        if (pdfForm.elements['levering'] && state.month) pdfForm.elements['levering'].value = state.month;
       }
 
       /* Vis */
@@ -381,41 +367,52 @@
     if (editBtn) editBtn.addEventListener('click', function () { showStep(TOTAL_STEPS); });
 
     /* ===========================================================
-       LEAD CAPTURE
+       LEAD CAPTURE — én handler, to adskilte formularer
        =========================================================== */
-    var form = $('.jsk__lead-form');
-    if (form) {
+    var forms  = $$('.jsk__lead-form');
+    var thanks = $('.jsk__thanks');
+
+    function buildLead(form, type) {
+      var val = function (n) { return form.elements[n] ? form.elements[n].value.trim() : ''; };
+      var common = {
+        kontaktperson: val('navn'),
+        rolle:         val('rolle'),
+        firma:         val('firma'),
+        email:         val('email'),
+        telefon:       val('telefon'),
+        besked:        val('besked'),
+        samtykke:      form.elements['samtykke'] ? form.elements['samtykke'].checked : false,
+        tilvalg:       state.addons.map(function (id) { return ADDON_LABEL[id] || id; }),
+        konfiguration: {
+          segment: state.segment, volumen: state.volume, produkt: state.product,
+          materiale: state.material, maaned: state.month, farve: state.color,
+          prisPrStk: pricePerUnit(state.volume, state.product),
+          tilvalgPrStk: addonsPerUnit()
+        }
+      };
+      if (type === 'meeting') {
+        common.type           = 'mødebooking';
+        common.moedeform      = val('moedeform');
+        common.moedetidspunkt = val('moedetid');
+      } else {
+        common.type             = 'designs+pdf';
+        common.cvr              = val('cvr');
+        common.ean              = val('ean');
+        common.antal            = val('antal');
+        common.leveringsperiode = val('levering');
+        common.budget           = val('budget');
+        common.oensker_stofproeve = form.elements['proeve'] ? form.elements['proeve'].checked : false;
+      }
+      return common;
+    }
+
+    forms.forEach(function (form) {
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-
-        /* Simpel HTML5-validering inkl. påkrævet samtykke */
         if (!form.checkValidity()) { form.reportValidity(); return; }
 
-        var val = function (n) { return form.elements[n] ? form.elements[n].value.trim() : ''; };
-        var lead = {
-          type:          state.mode === 'meeting' ? 'mødebooking' : 'designs+pdf',
-          kontaktperson: val('navn'),
-          rolle:         val('rolle'),
-          firma:         val('firma'),
-          cvr:           val('cvr'),
-          email:         val('email'),
-          telefon:       val('telefon'),
-          ean:           val('ean'),
-          antal:         val('antal'),
-          leveringsperiode: val('levering'),
-          budget:        val('budget'),
-          besked:        val('besked'),
-          moedetidspunkt: state.mode === 'meeting' ? val('moedetid') : '',
-          tilvalg:       state.addons.map(function (id) { return ADDON_LABEL[id] || id; }),
-          oensker_stofproeve: form.elements['proeve'] ? form.elements['proeve'].checked : false,
-          samtykke:      form.elements['samtykke'] ? form.elements['samtykke'].checked : false,
-          konfiguration: {
-            segment: state.segment, volumen: state.volume, produkt: state.product,
-            materiale: state.material, maaned: state.month, farve: state.color,
-            prisPrStk: pricePerUnit(state.volume, state.product),
-            tilvalgPrStk: addonsPerUnit()
-          }
-        };
+        var type = form.dataset.type;            // 'pdf' | 'meeting'
+        var lead = buildLead(form, type);
 
         /* >>> Her sendes lead'et videre i et rigtigt setup (fetch til CRM/Shopify/Klaviyo).
                For demoen logger vi blot og viser kvittering. <<< */
@@ -425,30 +422,26 @@
                                body: JSON.stringify(lead)});
         */
 
-        /* Mødebooking: åbn evt. eksternt booking-link (Calendly o.l.) */
-        var openedBooking = false;
-        if (state.mode === 'meeting' && BOOKING_URL) {
-          window.open(BOOKING_URL, '_blank', 'noopener');
-          openedBooking = true;
-        }
-
-        /* Tilpas kvittering efter valgt spor */
         var tTitle = $('.jsk__thanks-title');
         var tText  = $('.jsk__thanks-text');
-        if (state.mode === 'meeting') {
-          tTitle.textContent = 'Tak — vi glæder os til at tale med jer!';
-          tText.textContent = openedBooking
+        if (type === 'meeting') {
+          /* Personligt møde: åbn evt. eksternt booking-link (Calendly o.l.) */
+          var opened = false;
+          if (BOOKING_URL) { window.open(BOOKING_URL, '_blank', 'noopener'); opened = true; }
+          tTitle.textContent = 'Tak — vi glæder os til at mødes!';
+          tText.textContent = opened
             ? 'Vi har åbnet vores kalender i en ny fane — vælg det tidspunkt der passer jer.'
-            : 'En B2B-specialist sender en kalenderinvitation til ' + lead.email + ' for jeres ønskede tidspunkt.';
+            : 'En B2B-specialist bekræfter jeres møde på ' + lead.email + ' inden for 1 hverdag.';
         } else {
           tTitle.textContent = 'Tak! Vi er i gang.';
-          tText.textContent = 'Jeres 3 designudkast og PDF-estimat lander i indbakken inden for 1 hverdag.';
+          tText.textContent = 'Jeres 3 designudkast og PDF-estimat sendes til ' + lead.email + ' inden for 1 hverdag.';
         }
 
-        form.style.display = 'none';
-        $('.jsk__thanks').classList.add('is-active');
+        if (modeTabs) modeTabs.style.display = 'none';
+        panels.forEach(function (p) { p.style.display = 'none'; });
+        thanks.classList.add('is-active');
       });
-    }
+    });
 
     /* ---- Genstart ---- */
     var restart = $('.jsk__restart');
@@ -458,13 +451,14 @@
       state.addons = [];
       $$('.is-selected').forEach(function (el) { el.classList.remove('is-selected'); });
       $$('.jsk__addon').forEach(function (a) { a.setAttribute('aria-pressed', 'false'); });
-      setMode('pdf');
       if (learn1) { learn1.innerHTML = ''; learn1.parentElement.style.display = 'none'; }
       if (preview) preview.style.display = 'none';
       if (defaultDropText) defaultDropText.style.display = '';
       range.value = 500; renderVolume();
-      if (form) { form.style.display = ''; form.reset(); }
-      $('.jsk__thanks').classList.remove('is-active');
+      forms.forEach(function (f) { f.reset(); });
+      if (modeTabs) modeTabs.style.display = '';
+      thanks.classList.remove('is-active');
+      setMode('pdf');
       showStep(1);
     });
 

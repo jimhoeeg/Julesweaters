@@ -375,11 +375,7 @@
   padding: 11px 10px; cursor: pointer; transition: background .2s var(--jsk-ease), color .2s var(--jsk-ease);
 }
 .jsk__mode button.is-active { background: #fff; color: var(--jsk-red); }
-.jsk__meeting-note {
-  display: flex; gap: 10px; align-items: flex-start;
-  background: rgba(255,255,255,.14); border-radius: var(--jsk-radius-sm);
-  padding: 12px 14px; margin-bottom: 16px; font-size: .86rem;
-}
+.jsk__panel[hidden] { display: none; }
 
 /* ---------- Lead capture ---------- */
 .jsk__lead {
